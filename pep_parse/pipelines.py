@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).parent.parent
 
 class PepParsePipeline:
     """
-    Обработка полученных данных и сохраняет результат в results.
+    Обработка полученных данных и сохранение результата в results.
     Считает количество PEP в зависимости от статуса. Обобщает результат.
     """
 
@@ -18,18 +18,18 @@ class PepParsePipeline:
         results_dir = BASE_DIR / 'results'
         results_dir.mkdir(exist_ok=True)
         file_path = results_dir / file_name
-        self.file = open(file_path, 'w', newline='', encoding='utf-8')
+        self.file = open(file_path, 'w', encoding='utf-8')
         self.csvwriter = csv.writer(self.file)
         self.csvwriter.writerow(['Статус', 'Количество'])
-        self.temp = {}
+        self.status_count = {}
 
     def process_item(self, item, spider):
-        status = item.get('status')
-        self.temp[status] = self.temp.get(status, 0) + 1
+        status = item['status']
+        self.status_count[status] = self.status_count.get(status, 0) + 1
         return item
 
     def close_spider(self, spider):
-        for status, count in self.temp.items():
+        for status, count in self.status_count.items():
             self.csvwriter.writerow([status, count])
-        self.csvwriter.writerow(['Total', sum(self.temp.values())])
+        self.csvwriter.writerow(['Total', sum(self.status_count.values())])
         self.file.close()

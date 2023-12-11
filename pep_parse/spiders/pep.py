@@ -18,11 +18,10 @@ class PepSpider(scrapy.Spider):
             yield response.follow(link, callback=self.parse_pep)
 
     def parse_pep(self, response):
+        pep_title = response.css('h1.pagr-title::text')
         data = {
-            'number': response.css('h1.page-title::text').re_first(
-                r'PEP (\d+)'
-            ),
-            'name': response.css('h1.page-title::text').get(),
+            'number': pep_title.re_first(r'PEP (\d+)'),
+            'name': pep_title.get(),
             'status': response.css(
                 'dl dt:contains("Status") + dd abbr::text'
             ).get()
