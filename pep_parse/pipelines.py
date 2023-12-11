@@ -1,5 +1,6 @@
 import csv
 import datetime as dt
+import os
 
 from pep_parse.settings import BASE_DIR
 
@@ -13,10 +14,10 @@ class PepParsePipeline:
     def open_spider(self, spider):
         current_datetime = dt.datetime.now()
         formatted_datetime = current_datetime.strftime('%Y-%m-%d_%H-%M-%S')
-        file_name = 'status_summary_' + formatted_datetime + '.csv'
-        results_dir = BASE_DIR / 'results'
-        results_dir.mkdir(exist_ok=True)
-        file_path = results_dir / file_name
+        file_name = f'status_summary_{formatted_datetime}.csv'
+        RESULTS_DIR = BASE_DIR / 'results'
+        os.makedirs(RESULTS_DIR, exist_ok=True)
+        file_path = os.path.join(RESULTS_DIR, file_name)
         self.file = open(file_path, 'w', encoding='utf-8')
         self.csvwriter = csv.writer(self.file)
         self.csvwriter.writerow(['Статус', 'Количество'])
