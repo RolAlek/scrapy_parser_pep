@@ -1,8 +1,7 @@
 import csv
 import datetime as dt
-from pathlib import Path
 
-BASE_DIR = Path(__file__).parent.parent
+from pep_parse.settings import BASE_DIR
 
 
 class PepParsePipeline:
